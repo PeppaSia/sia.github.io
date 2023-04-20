@@ -1,14 +1,31 @@
 # /bin/python3
 # -*- coding:utf-8 -*-
-
 import numpy as np
 
+
 def cross_correlation1(x, y):
-    result = np.zeros(len(x) + len(y) - 1)
-    for i in range(len(x)):
-        for j in range(len(y)):
-            result[i+j] += x[i] * y[j]
-    return result
+    print('x:', x)
+    print('y:', y)
+    m, n = len(x), len(y)
+    offset_range = max(m, n)
+    offset = None
+    max_res = -1000
+    for t in range(-offset_range, offset_range, 1):
+        result = 0
+        for i in range(m):
+            index = t + i
+            if index < 0:
+                continue
+            if index >= n:
+                continue
+            # print(t, i, index, x[i], y[index], x[i] * y[index])
+            result = result + x[i] * y[index]
+        print(t, result)
+        if result > max_res:
+            max_res = result
+            offset = t
+    return offset, max_res
+
 
 def cross_correlation(data1, times1, data2, times2, timeoffset):
     size_data1 = data1.shape[0]
@@ -28,6 +45,7 @@ def cross_correlation(data1, times1, data2, times2, timeoffset):
                 continue
             if index >= size_data2:
                 continue
+            print(i, j, index, data1[j] * data2[index])
             corre_val = corre_val + data1[j] * data2[index]
 
         if corre_val > max_val:
@@ -45,19 +63,8 @@ def cross_correlation(data1, times1, data2, times2, timeoffset):
 
     return idx_versus_correlation[0:count], max_offset, time_shift
 
+
 if __name__ == '__main__':
-
-    # 生成测试数据
-    data1 = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-    times1 = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-    data2 = np.array([1, 0, 1, 0, 1, 0, 1, 0, 1, 0])
-    times2 = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-
-    # 计算函数互相关
-    result, offset, shift = cross_correlation(data1, times1, data2, times2, 5)
-
-    # 输出结果
-    print("函数互相关结果：")
-    print(result)
-    print("时间偏移：", offset)
-    print("时间漂移：", shift)
+    x = [5, 6, 7, 0, 0, 0]
+    y = [5, 6, 7, 0, 0, 0]
+    print(cross_correlation1(x, y))
