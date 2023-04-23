@@ -20,7 +20,7 @@ def cross_correlation1(x, y):
                 continue
             # print(t, i, index, x[i], y[index], x[i] * y[index])
             result = result + x[i] * y[index]
-        print(f'y信号移动{t},自相关值为{result}')
+        print(f'y信号移动{t}，自相关值为{result}')
         if result > max_res:
             max_res = result
             offset = t
@@ -31,4 +31,4 @@ if __name__ == '__main__':
     x = [5, 6, 0]
     y = [5, 6, 0]
     offset, max_res = cross_correlation1(x, y)
-    print(f'y信号移动{offset},自相关值最大，最大为{max_res}')
+    print(f'y信号移动{offset}，自相关值最大，最大为{max_res}')
